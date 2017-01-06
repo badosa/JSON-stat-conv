@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+const
+  inout=require("./inout"),
+  fs=require("fs"),
+  argv=require("yargs")
+    .usage("Usage: $0 [input filename] [output filename]")
+    .example("$0 oecd.json oecd-array.json", "converts JSON-stat (oecd.json) into an array of arrays (oecd-array.json).")
+    .boolean("s")
+    .alias("s", "status")
+    .describe("s", "Include status information")
+    .alias("v", "vlabel")
+    .describe("v", "Label of the value field (default is 'Value')")
+    .alias("l", "slabel")
+    .describe("l", "Label of the status field (default is 'Status')")
+    .boolean("f")
+    .alias("f", "fid")
+    .describe("f", "Identify dimensions, value and status by ID instead of label")
+    .boolean("c")
+    .alias("c", "cid")
+    .describe("c", "Identify categories by ID instead of label")
+    .help("h")
+    .alias("h", "help")
+    .demandCommand(2)
+    .argv
+  ,
+  input=argv._[0],
+  tbl=inout.ds(input).toTable({
+    type: "array",
+    vlabel: argv.vlabel ? argv.vlabel : "Value",
+    slabel: argv.slabel ? argv.slabel : "Status",
+    status: argv.status,
+    content: argv.cid ? "id": "label",
+    field: argv.fid ? "id": "label"
+  })
+;
+
+if(tbl===null){
+  console.log(input + " does not containt valid JSON-stat.");
+  process.exit(0);
+}
+
+inout.out(argv._[1], JSON.stringify(tbl));

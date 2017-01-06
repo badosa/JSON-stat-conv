@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+const
+  inout=require("./inout"),
+  fs=require("fs"),
+  argv=require("yargs")
+    .usage("Usage: $0 [input filename] [output filename]")
+    .example("$0 oecd.json oecd-arrobj.json", "converts JSON-stat (oecd.json) into an array of objects (oecd-arrobj.json).")
+    .boolean("s")
+    .alias("s", "status")
+    .describe("s", "Include status information")
+    .boolean("c")
+    .alias("c", "cid")
+    .describe("c", "Identify categories by ID instead of label")
+    .boolean("u")
+    .alias("u", "unit")
+    .describe("u", "Include unit information when available")
+    .help("h")
+    .alias("h", "help")
+    .demandCommand(2)
+    .argv
+  ,
+  input=argv._[0],
+  tbl=inout.ds(input).toTable({
+    type: "arrobj",
+    status: argv.status,
+    content: argv.cid ? "id": "label",
+    unit: argv.unit
+  })
+;
+
+if(tbl===null){
+  console.log(input + " does not containt valid JSON-stat.");
+  process.exit(0);
+}
+
+inout.out(argv._[1], JSON.stringify(tbl));
