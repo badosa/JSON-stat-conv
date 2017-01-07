@@ -4,6 +4,7 @@ const
   inout=require("./inout"),
   fs=require("fs"),
   argv=require("yargs")
+    .version()
     .usage("Usage: $0 [input filename] [output filename]")
     .example("$0 oecd.json oecd-array.json", "converts JSON-stat (oecd.json) into an array of arrays (oecd-array.json).")
     .boolean("s")
@@ -27,8 +28,8 @@ const
   input=argv._[0],
   tbl=inout.ds(input).toTable({
     type: "array",
-    vlabel: argv.vlabel ? argv.vlabel : "Value",
-    slabel: argv.slabel ? argv.slabel : "Status",
+    vlabel: argv.vlabel || "Value",
+    slabel: argv.slabel || "Status",
     status: argv.status,
     content: argv.cid ? "id": "label",
     field: argv.fid ? "id": "label"

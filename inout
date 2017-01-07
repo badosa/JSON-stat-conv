@@ -1,7 +1,7 @@
 const
   fs=require("fs"),
   JSONstat=require("jsonstat"),
-  ds=function(input){
+  dataset=function(input){
     if(!fs.existsSync(input)){
       console.log("Error: " + input + " does not exist.");
       process.exit(0);
@@ -31,7 +31,19 @@ const
       process.exit(0);
     }
 
-    return (j.class==="dataset") ? j : j.Dataset(0);
+    const ds=(j.class==="dataset") ? j : j.Dataset(0);
+
+    let i=ds.length, len=1;
+		for(; i--;){
+			len*=ds.Dimension(i).length;
+		}
+
+		if(len!==ds.n){
+      console.log(input + " does not containt valid JSON-stat.");
+      process.exit(0);
+		}
+
+		return ds;
   },
   out=function(output, content){
     const saved=fs.writeFileSync(output, content, "utf8");
@@ -45,5 +57,5 @@ const
   }
 ;
 
-module.exports.ds=ds;
+module.exports.ds=dataset;
 module.exports.out=out;
