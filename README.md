@@ -3,7 +3,7 @@
 Command line tools for converting [JSON-stat](https://json-stat.org) documents.
 
 ```
-npm install jsonstat-conv
+npm install -g jsonstat-conv
 ```
 
 Available commands:
