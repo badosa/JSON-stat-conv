@@ -31,7 +31,7 @@ const
 ;
 
 if(tbl===null){
-  console.log(input + " does not containt valid JSON-stat.");
+  console.log("Error: " + input + " does not containt valid JSON-stat.");
   process.exit(0);
 }
 

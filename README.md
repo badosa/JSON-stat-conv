@@ -170,6 +170,12 @@ String. Column separator. Default is ",".
 jsonstat2csv oecd.json oecd.csv --column ";"
 ```
 
+To use as column separator a string that starts with "-", write "\-":
+
+```
+jsonstat2csv oecd.json oecd.csv --column "\-|-"
+```
+
 #### --decimal
 
 String. Decimal separator. Default is ".".

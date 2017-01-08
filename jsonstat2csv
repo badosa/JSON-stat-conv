@@ -36,7 +36,7 @@ const
 ;
 
 if(tbl===null){
-  console.log(input + " does not containt valid JSON-stat.");
+  console.log("Error: " + input + " does not containt valid JSON-stat.");
   process.exit(0);
 }
 
@@ -55,6 +55,8 @@ let
 
 if(delimiter==="\\t"){
   delimiter="\t";
+}else{
+  delimiter=delimiter.replace(/^\\-/, "-");
 }
 
 tbl.forEach(function(r){
@@ -71,9 +73,7 @@ tbl.forEach(function(r){
       r[i]='"' + r[i] + '"';
     }
   });
-});
 
-tbl.forEach(function(r){
   csv+=r.join(delimiter)+"\n";
 });
 
