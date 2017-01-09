@@ -1,26 +1,26 @@
 {
-  "name": "jsonstat-conv",
-  "version": "0.2.3",
-  "description": "JSON-stat Command Line Conversion Tools",
-  "homepage": "https://github.com/badosa/JSON-stat-conv",
+	"name": "jsonstat-conv",
+	"version": "0.3.0",
+	"description": "JSON-stat Command Line Conversion Tools",
+	"homepage": "https://github.com/badosa/JSON-stat-conv",
 	"keywords": ["conversion", "util", "jsonstat", "stats", "data", "cube", "opendata"],
-  "bin": {
-    "jsonstat2array": "jsonstat2array",
-    "jsonstat2arrobj": "jsonstat2arrobj",
-    "jsonstat2object": "jsonstat2object",
-    "jsonstat2csv": "jsonstat2csv"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": {
-    "name": "Xavier Badosa",
+	"bin": {
+		"jsonstat2array": "jsonstat2array",
+		"jsonstat2arrobj": "jsonstat2arrobj",
+		"jsonstat2object": "jsonstat2object",
+		"jsonstat2csv": "jsonstat2csv"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": {
+		"name": "Xavier Badosa",
 		"url": "http://xavierbadosa.com"
-  },
-  "repository": {"type": "git", "url": "https://github.com/badosa/JSON-stat-conv.git"},
-  "license": "Apache-2.0",
-  "dependencies": {
-    "jsonstat": "^0.12.4",
-    "yargs": "^6.6.0"
-  }
+	},
+	"repository": {"type": "git", "url": "https://github.com/badosa/JSON-stat-conv.git"},
+	"license": "Apache-2.0",
+	"dependencies": {
+		"jsonstat": "^0.12.4",
+		"yargs": "^6.6.0"
+	}
 }
