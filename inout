@@ -1,76 +1,77 @@
-const
-  fs=require("fs"),
-  JSONstat=require("jsonstat"),
+var
+	fs=require("fs"),
+	JSONstat=require("jsonstat"),
 
-  dataset=function(input){
-    if(!fs.existsSync(input)){
-      console.log("Error: " + input + " does not exist.");
-      process.exit(0);
-    }
+	dataset=function(input){
+		if(!fs.existsSync(input)){
+			console.log("Error: " + input + " does not exist.");
+			process.exit(0);
+		}
 
-    const contents=fs.readFileSync(input, "utf8");
+		var contents=fs.readFileSync(input, "utf8");
 
-    let json=null;
+		try{
+			var json=JSON.parse(contents);
+		}catch (e){
+			console.log("Error: " + input + " does not containt JSON.");
+			process.exit(0);
+		}
 
-    try{
-      json=JSON.parse(contents);
-    }catch (e){
-      console.log("Error: " + input + " does not containt JSON.");
-      process.exit(0);
-    }
+		var j=JSONstat(json);
 
-    const j=JSONstat(json);
+		if(j.length===0 ||
+			(
+				j.class!=="dataset" &&
+				j.class!=="collection" &&
+				j.class!=="bundle"
+			)
+		){
+			console.log("Error: " + input + " does not containt JSON-stat.");
+			process.exit(0);
+		}
 
-    if(j.length===0 ||
-      (
-        j.class!=="dataset" &&
-        j.class!=="collection" &&
-        j.class!=="bundle"
-      )
-    ){
-      console.log("Error: " + input + " does not containt JSON-stat.");
-      process.exit(0);
-    }
+		var 
+			ds=(j.class==="dataset") ? j : j.Dataset(0),
+			i=ds.length,
+			len=1
+		;
 
-    const ds=(j.class==="dataset") ? j : j.Dataset(0);
-
-    let i=ds.length, len=1;
 		for(; i--;){
 			len*=ds.Dimension(i).length;
 		}
 
 		if(len!==ds.n){
-      console.log("Error: " + input + " does not containt valid JSON-stat.");
-      process.exit(0);
+			console.log("Error: " + input + " does not containt valid JSON-stat.");
+			process.exit(0);
 		}
 
 		return ds;
-  },
+	},
 
-  out=function(output, content){
-    if(fs.existsSync(output)){
-      console.log("Warning: " + output + " already exists.");
+	out=function(output, content){
+		if(fs.existsSync(output)){
+			console.log("Warning: " + output + " already exists.");
 
-      const d=new Date();
-      output+="-" + d.toJSON().replace(/-|:|\.|T|Z/g, "");
+			const d=new Date();
+			output+="-" + d.toJSON().replace(/-|:|\.|T|Z/g, "");
 
-      if(fs.existsSync(output)){
-        console.log("Error: Tried" + output + " but it already exists too. Run again.");
-        process.exit(0);
-      }
+			if(fs.existsSync(output)){
+				console.log("Error: Tried" + output + " but it already exists too. Run again.");
+				process.exit(0);
+			}
 
-      console.log("Warning: Using " + output + " instead.");
-    }
+			console.log("Warning: Using " + output + " instead.");
+		}
 
-    const saved=fs.writeFileSync(output, content, "utf8");
+		const saved=fs.writeFileSync(output, content, "utf8");
 
-    if(saved===false){
-      console.log("Error: Couldn't create " + output + ".");
-      process.exit(0);
-    }
+		if(saved===false){
+			console.log("Error: Couldn't create " + output + ".");
+			process.exit(0);
+		}
 
-    console.log("Success: " + output + " has been created.");
-  }
+		console.log("Success: " + output + " has been created.");
+	}
 ;
 
 module.exports.ds=dataset;
