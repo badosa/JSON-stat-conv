@@ -15,7 +15,7 @@ Available commands:
 
 ## Example
 
-Get unemployment rate time series from Eurostat and convert to CSV.
+Get unemployment rate time series by country from Eurostat and convert it to CSV.
 
 ```
 curl 'http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?sex=T&precision=1&age=TOTAL&s_adj=NSA' -o unr.json
@@ -178,7 +178,7 @@ jsonstat2csv oecd.json oecd.csv --column "\-|-"
 
 #### --decimal
 
-String. Decimal separator. Default is ".".
+String. Decimal separator. Default is ".", unless column separator is ";" (then default is ",").
 
 ```
 jsonstat2csv oecd.json oecd.csv --column "\t" --decimal ","
@@ -186,7 +186,7 @@ jsonstat2csv oecd.json oecd.csv --column "\t" --decimal ","
 
 ## jsonstat2object
 
-Converts JSON-stat into an object.
+Converts JSON-stat into an object of arrays in the [Google DataTable format](https://developers.google.com/chart/interactive/docs/reference#dataparam).
 
 ```
 jsonstat2object oecd.json oecd-object.json
