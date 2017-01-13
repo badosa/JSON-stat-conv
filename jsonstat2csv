@@ -25,7 +25,7 @@ var
 		.describe("t", "Enable the stream interface")
 		.help("h")
 		.alias("h", "help")
-		.argv
+		.parse(process.argv.slice(1))
 	,
 	inout=require("./inout"),
 

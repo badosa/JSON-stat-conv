@@ -1,6 +1,6 @@
 {
 	"name": "jsonstat-conv",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"description": "JSON-stat Command Line Conversion Tools",
 	"homepage": "https://github.com/badosa/JSON-stat-conv",
 	"keywords": ["conversion", "util", "jsonstat", "stats", "data", "cube", "opendata"],
