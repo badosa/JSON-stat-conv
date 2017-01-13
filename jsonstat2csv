@@ -25,7 +25,7 @@ var
 		.describe("t", "Enable the stream interface")
 		.help("h")
 		.alias("h", "help")
-		.parse(process.argv.slice(1))
+		.argv
 	,
 	inout=require("./inout"),
 
@@ -82,4 +82,4 @@ var
 		return csv;
 	}
 
-inout.main(argv, callback);
+inout.main(argv, callback, true);
