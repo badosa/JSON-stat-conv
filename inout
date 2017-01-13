@@ -1,20 +1,14 @@
 var
 	fs=require("fs"),
+	readline=require("readline"),
 	JSONstat=require("jsonstat"),
 
-	dataset=function(input){
-		if(!fs.existsSync(input)){
-			console.log("Error: " + input + " does not exist.");
-			process.exit(0);
-		}
-
-		var contents=fs.readFileSync(input, "utf8");
-
+	dataset=function(contents){
 		try{
 			var json=JSON.parse(contents);
 		}catch (e){
-			console.log("Error: " + input + " does not containt JSON.");
-			process.exit(0);
+			console.error("Error: The input does not containt JSON.");
+			process.exit(1);
 		}
 
 		var j=JSONstat(json);
@@ -26,11 +20,11 @@ var
 				j.class!=="bundle"
 			)
 		){
-			console.log("Error: " + input + " does not containt JSON-stat.");
-			process.exit(0);
+			console.error("Error: The input does not containt JSON-stat.");
+			process.exit(1);
 		}
 
-		var 
+		var
 			ds=(j.class==="dataset") ? j : j.Dataset(0),
 			i=ds.length,
 			len=1
@@ -41,38 +35,95 @@ var
 		}
 
 		if(len!==ds.n){
-			console.log("Error: " + input + " does not containt valid JSON-stat.");
-			process.exit(0);
+			console.error("Error: The input does not containt valid JSON-stat.");
+			process.exit(1);
 		}
 
 		return ds;
 	},
 
-	out=function(output, content){
-		if(fs.existsSync(output)){
-			console.log("Warning: " + output + " already exists.");
+	main=function(argv, callback){
+		if(!argv.stream){
+			if(argv._.length<2){
+				console.error("Error: When --stream is not enabled you must specify two filenames.");
+				process.exit(1);
+			}
+			//arguments
+			var
+				input=argv._[0],
+				out=function(output, content){
+					if(fs.existsSync(output)){
+						console.log("Warning: " + output + " already exists.");
 
-			const d=new Date();
-			output+="-" + d.toJSON().replace(/-|:|\.|T|Z/g, "");
+						var d=new Date();
+						output+="-" + d.toJSON().replace(/-|:|\.|T|Z/g, "");
 
-			if(fs.existsSync(output)){
-				console.log("Error: Tried" + output + " but it already exists too. Run again.");
-				process.exit(0);
+						if(fs.existsSync(output)){
+							console.error("Error: Tried" + output + " but it already exists too. Run again.");
+							process.exit(1);
+						}
+
+						console.log("Warning: Using " + output + " instead.");
+					}
+
+					if(fs.writeFileSync(output, content, "utf8")===false){
+						console.error("Error: Couldn't create " + output + ".");
+						process.exit(1);
+					}
+
+					console.log("Success: " + output + " has been created.");
+					process.exit(0);
+				}
+			;
+
+			if(!fs.existsSync(input)){
+				console.error("Error: " + input + " does not exist.");
+				process.exit(1);
 			}
 
-			console.log("Warning: Using " + output + " instead.");
+			var result=(argv.$0==="jsonstat2csv") ?
+				callback( fs.readFileSync(input, "utf8") )
+				:
+				JSON.stringify( callback( fs.readFileSync(input, "utf8") ) )
+			;
+
+
+			out( argv._[1], result);
+
+		}else{ //streams
+			if(argv._.length>1){
+				console.error("Error: With --stream enabled no input/output filename can be specified.");
+				process.exit(1);
+			}
+
+			process.stdin.setEncoding("utf8");
+
+			var
+				rl=readline.createInterface({
+					input: process.stdin,
+					output: process.stdout
+				}),
+				contents=""
+			;
+
+			rl.on("line", function(line){
+				contents+=line;
+			});
+
+			rl.on("close", function(){
+				var result=(argv.$0==="jsonstat2csv") ?
+					callback(contents)
+					:
+					JSON.stringify( callback(contents) )
+				;
+
+				console.log(result);
+				process.exit(0);
+			});
+
 		}
-
-		const saved=fs.writeFileSync(output, content, "utf8");
-
-		if(saved===false){
-			console.log("Error: Couldn't create " + output + ".");
-			process.exit(0);
-		}
-
-		console.log("Success: " + output + " has been created.");
 	}
 ;
 
-module.exports.ds=dataset;
-module.exports.out=out;
+module.exports.dataset=dataset;
+module.exports.main=main;

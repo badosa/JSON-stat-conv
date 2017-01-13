@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
 var
-	inout=require("./inout"),
-	fs=require("fs"),
 	argv=require("yargs")
 		.version()
-		.usage("Usage: $0 [input filename] [output filename]")
-		.example("$0 oecd.json oecd-arrobj.json", "converts JSON-stat (oecd.json) into an array of objects (oecd-arrobj.json).")
+		.usage("Usage:\n  $0 [input filename] [output filename]\n  $0 < [input] > [output] -t")
+		.example("$0 oecd.json oecd-arrobj.json", "converts JSON-stat file oecd.json into a new file (oecd-arrobj.json) containing an array of objects.")
+		.example("$0 < oecd.json > oecd-arrobj.json -t", "converts JSON-stat stream oecd.json into a new stream (oecd-arrobj.json) containing an array of objects.")
 		.boolean("s")
 		.alias("s", "status")
 		.describe("s", "Include status information")
@@ -16,23 +15,31 @@ var
 		.boolean("u")
 		.alias("u", "unit")
 		.describe("u", "Include unit information when available")
+		.boolean("t")
+		.alias("t", "stream")
+		.describe("t", "Enable the stream interface")
 		.help("h")
 		.alias("h", "help")
-		.demandCommand(2)
 		.argv
 	,
-	input=argv._[0],
-	tbl=inout.ds(input).toTable({
-		type: "arrobj",
-		status: argv.status,
-		content: argv.cid ? "id": "label",
-		unit: argv.unit
-	})
-;
+	inout=require("./inout"),
 
-if(tbl===null){
-	console.log("Error: " + input + " does not containt valid JSON-stat.");
-	process.exit(0);
-}
+	callback=function(contents){
+		var
+			tbl=inout.dataset(contents).toTable({
+				type: "arrobj",
+				status: argv.status,
+				content: argv.cid ? "id": "label",
+				unit: argv.unit
+			})
+		;
 
-inout.out(argv._[1], JSON.stringify(tbl));
+		if(tbl===null){
+			console.error("Error: The input does not containt valid JSON-stat.");
+			process.exit(1);
+		}
+
+		return tbl;
+	}
+
+inout.main(argv, callback);

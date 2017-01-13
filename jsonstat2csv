@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 var
-	inout=require("./inout"),
 	fs=require("fs"),
 	argv=require("yargs")
 		.version()
-		.usage("Usage: $0 [input filename] [output filename]")
-		.example("$0 oecd.json oecd.csv", "converts JSON-stat (oecd.json) into CSV (oecd.csv).")
+		.usage("Usage:\n  $0 [input filename] [output filename]\n  $0 < [input] > [output] -t")
+		.example("$0 oecd.json oecd.csv", "converts JSON-stat file oecd.json into a new file (oecd.csv) in the CSV format.")
+		.example("$0 < oecd.json > oecd.csv -t", "converts JSON-stat stream oecd.json into a new stream (oecd.csv) in the CSV format.")
 		.boolean("s")
 		.alias("n", "na")
 		.describe("n", "Not available symbol (default, 'n/a')")
@@ -20,60 +20,66 @@ var
 		.describe("v", "Label of the value field (default is 'Value')")
 		.alias("l", "slabel")
 		.describe("l", "Label of the status field (default is 'Status')")
+		.boolean("t")
+		.alias("t", "stream")
+		.describe("t", "Enable the stream interface")
 		.help("h")
 		.alias("h", "help")
-		.demandCommand(2)
 		.argv
 	,
-	input=argv._[0],
-	vlabel=argv.vlabel || "Value",
-	tbl=inout.ds(input).toTable({
-		type: "array",
-		vlabel: vlabel,
-		slabel: argv.slabel || "Status",
-		status: argv.status
-	})
-;
+	inout=require("./inout"),
 
-if(tbl===null){
-	console.log("Error: " + input + " does not containt valid JSON-stat.");
-	process.exit(0);
-}
+	callback=function(contents){
+		var
+			vlabel=argv.vlabel || "Value",
+			tbl=inout.dataset(contents).toTable({
+				type: "array",
+				vlabel: vlabel,
+				slabel: argv.slabel || "Status",
+				status: argv.status
+			})
+		;
 
-var
-	csv=[],
-	na=argv.na || "n/a",
-	delimiter=argv.column || ",",
-	decimal=(delimiter===";") ?
-		(argv.decimal || ",")
-		:
-		(argv.decimal || ".")
-	,
-	vcol=tbl[0].indexOf(vlabel)
-;
-
-if(delimiter==="\\t"){
-	delimiter="\t";
-}else{
-	delimiter=delimiter.replace(/^\\-/, "-");
-}
-
-tbl.forEach(function(r, j){
-	r.forEach(function(c, i){
-		if(i===vcol && j){
-			if(c===null){
-				r[i]='"' + na + '"';
-			}else{
-				if(decimal!=="."){
-					r[i]=String(r[i]).replace(".", decimal);
-				}
-			}
-		}else{
-			r[i]='"' + r[i] + '"';
+		if(tbl===null){
+			console.error("Error: The input does not containt valid JSON-stat.");
+			process.exit(1);
 		}
-	});
 
-	csv+=r.join(delimiter)+"\n";
-});
+		var
+			csv=[],
+			na=argv.na || "n/a",
+			delimiter=(argv.column===true || typeof argv.column==="undefined") ? "," : argv.column,
+			decimal=(delimiter===";") ?
+				(argv.decimal===true || typeof argv.decimal==="undefined" ? "," : argv.decimal)
+				:
+				(argv.decimal===true || typeof argv.decimal==="undefined" ? "." : argv.decimal)
+			,
+			vcol=tbl[0].indexOf(vlabel)
+		;
 
-inout.out(argv._[1], csv);
+		if(delimiter==="\\t"){
+			delimiter="\t";
+		}
+
+		tbl.forEach(function(r, j){
+			r.forEach(function(c, i){
+				if(i===vcol && j){
+					if(c===null){
+						r[i]='"' + na + '"';
+					}else{
+						if(decimal!=="."){
+							r[i]=String(r[i]).replace(".", decimal);
+						}
+					}
+				}else{
+					r[i]='"' + r[i] + '"';
+				}
+			});
+
+			csv+=r.join(delimiter)+"\n";
+		});
+
+		return csv;
+	}
+
+inout.main(argv, callback);

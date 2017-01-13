@@ -22,14 +22,28 @@ curl 'http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?sex=T&pr
 jsonstat2csv unr.json unr.csv
 ```
 
+Or using the stream interface:
+
+```
+curl 'http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?sex=T&precision=1&age=TOTAL&s_adj=NSA' | jsonstat2csv > unr.csv -t
+```
+
 ## Shared options
 
-### --help
+### --help (-h)
 
 Shows command's help.
 
 ```
 jsonstat2csv --help
+```
+
+### --stream (-t)
+
+Use the stream interface:
+
+```
+jsonstat2csv < oecd.json > oecd.csv -t
 ```
 
 ### --version
@@ -50,7 +64,7 @@ jsonstat2array oecd.json oecd-array.json
 
 ### Options
 
-#### --status
+#### --status (-s)
 
 Boolean. Includes status information.
 
@@ -58,7 +72,7 @@ Boolean. Includes status information.
 jsonstat2array oecd.json oecd-array.json --status
 ```
 
-#### --vlabel
+#### --vlabel (-v)
 
 String. Specifies the label of the value field. Default is "Value".
 
@@ -66,7 +80,7 @@ String. Specifies the label of the value field. Default is "Value".
 jsonstat2array oecd.json oecd-array.json --vlabel val
 ```
 
-#### --slabel
+#### --slabel (-l)
 
 String. Specifies the label of the status field. Default is "Status".
 
@@ -74,7 +88,7 @@ String. Specifies the label of the status field. Default is "Status".
 jsonstat2array oecd.json oecd-array.json --status --slabel stat
 ```
 
-#### --fid
+#### --fid (-f)
 
 Boolean. Identifies dimensions, value and status by ID instead of label.
 
@@ -82,7 +96,7 @@ Boolean. Identifies dimensions, value and status by ID instead of label.
 jsonstat2array oecd.json oecd-array.json --fid
 ```
 
-#### --cid
+#### --cid (-c)
 
 Boolean. Identifies categories by ID instead of label.
 
@@ -98,7 +112,7 @@ Converts JSON-stat into an array of objects.
 jsonstat2arrobj oecd.json oecd-arrobj.json
 ```
 
-#### --status
+#### --status (-s)
 
 Boolean. Includes status information.
 
@@ -106,7 +120,7 @@ Boolean. Includes status information.
 jsonstat2arrobj oecd.json oecd-arrobj.json --status
 ```
 
-#### --cid
+#### --cid (-c)
 
 Boolean. Identifies categories by ID instead of label.
 
@@ -114,7 +128,7 @@ Boolean. Identifies categories by ID instead of label.
 jsonstat2arrobj oecd.json oecd-arrobj.json --cid
 ```
 
-#### --unit
+#### --unit (-u)
 
 Boolean. Includes unit information when available.
 
@@ -130,7 +144,7 @@ Converts JSON-stat into CSV.
 jsonstat2array oecd.json oecd.csv
 ```
 
-#### --status
+#### --status (-s)
 
 Boolean. Includes status information.
 
@@ -138,7 +152,7 @@ Boolean. Includes status information.
 jsonstat2csv oecd.json oecd.csv --status
 ```
 
-#### --vlabel
+#### --vlabel (-v)
 
 String. Specifies the label of the value field. Default is "Value".
 
@@ -146,7 +160,7 @@ String. Specifies the label of the value field. Default is "Value".
 jsonstat2csv oecd.json oecd.csv --vlabel val
 ```
 
-#### --slabel
+#### --slabel (l)
 
 String. Specifies the label of the status field. Default is "Status".
 
@@ -154,7 +168,7 @@ String. Specifies the label of the status field. Default is "Status".
 jsonstat2csv oecd.json oecd.csv --status --slabel stat
 ```
 
-#### --na
+#### --na (-n)
 
 String. Not available symbol. Default is "n/a".
 
@@ -162,7 +176,7 @@ String. Not available symbol. Default is "n/a".
 jsonstat2csv oecd.json oecd.csv --na ":"
 ```
 
-#### --column
+#### --column (-c)
 
 String. Column separator. Default is ",".
 
@@ -170,13 +184,7 @@ String. Column separator. Default is ",".
 jsonstat2csv oecd.json oecd.csv --column ";"
 ```
 
-To use as column separator a string that starts with "-", write "\\-":
-
-```
-jsonstat2csv oecd.json oecd.csv --column "\-|-"
-```
-
-#### --decimal
+#### --decimal (-d)
 
 String. Decimal separator. Default is ".", unless column separator is ";" (then default is ",").
 
@@ -192,7 +200,7 @@ Converts JSON-stat into an object of arrays in the [Google DataTable format](htt
 jsonstat2object oecd.json oecd-object.json
 ```
 
-#### --status
+#### --status (-s)
 
 Boolean. Includes status information.
 
@@ -200,7 +208,7 @@ Boolean. Includes status information.
 jsonstat2object oecd.json oecd-object.json --status
 ```
 
-#### --vlabel
+#### --vlabel (-v)
 
 String. Specifies the label of the value field. Default is "Value".
 
@@ -208,7 +216,7 @@ String. Specifies the label of the value field. Default is "Value".
 jsonstat2object oecd.json oecd-object.json --vlabel val
 ```
 
-#### --slabel
+#### --slabel (-l)
 
 String. Specifies the label of the status field. Default is "Status".
 
@@ -216,7 +224,7 @@ String. Specifies the label of the status field. Default is "Status".
 jsonstat2object oecd.json oecd-object.json --status --slabel stat
 ```
 
-#### --fid
+#### --fid (-f)
 
 Boolean. Identifies dimensions, value and status by ID instead of label.
 
@@ -224,7 +232,7 @@ Boolean. Identifies dimensions, value and status by ID instead of label.
 jsonstat2object oecd.json oecd-object.json --fid
 ```
 
-#### --cid
+#### --cid (-c)
 
 Boolean. Identifies categories by ID instead of label.
 
