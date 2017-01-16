@@ -15,6 +15,15 @@ var
 		.boolean("u")
 		.alias("u", "unit")
 		.describe("u", "Include unit information when available")
+		.boolean("m")
+		.alias("m", "meta")
+		.describe("m", "Use the metadata enriched output (object of objects)")
+		.alias("b", "by")
+		.describe("b", "Transpose by the specified single category dimension")
+		.alias("p", "prefix")
+		.describe("p", "Prefix to be used when data is transposed")
+		.alias("d", "drop")
+		.describe("d", "Comma-separated single category dimensions to be dropped when data is transposed")
 		.boolean("t")
 		.alias("t", "stream")
 		.describe("t", "Enable the stream interface")
@@ -26,11 +35,16 @@ var
 
 	callback=function(contents){
 		var
+			drop=(typeof argv.drop==="undefined") ? [] : argv.drop.split(","),
 			tbl=inout.dataset(contents).toTable({
 				type: "arrobj",
 				status: argv.status,
 				content: argv.cid ? "id": "label",
-				unit: argv.unit
+				unit: argv.unit,
+				meta: argv.meta,
+				by: argv.by,
+				prefix: argv.prefix,
+				drop: drop
 			})
 		;
 
@@ -41,5 +55,6 @@ var
 
 		return tbl;
 	}
+;
 
 inout.main(argv, callback);
