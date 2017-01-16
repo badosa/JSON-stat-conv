@@ -136,6 +136,38 @@ Boolean. Includes unit information when available.
 jsonstat2arrobj oecd.json oecd-arrobj.json --unit
 ```
 
+#### --meta (-m)
+
+Boolean. Returns a metadata-enriched output (object of objects, instead of array of objects).
+
+```
+jsonstat2arrobj oecd.json oecd-objobj.json --meta
+```
+
+#### --by (-b)
+
+String. Transposes data by the specified dimension. String must be an existing dimension ID. Otherwise it will be ignored.
+
+```
+jsonstat2arrobj oecd.json oecd-transp.json --by area
+```
+
+#### --prefix (-p)
+
+String. Text to be used as a prefix in the transposed categories. Only valid in combination with --by.
+
+```
+jsonstat2arrobj oecd.json oecd-transp.json --by area --prefix "AREA:"
+```
+
+#### --drop (-d)
+
+String. Comma-separated dimension IDs to be dropped from the output. Dimensions with more than one category cannot be dropped. Only valid in combination with --by.
+
+```
+jsonstat2arrobj canada.json canada-transp.json --by concept --drop country,year
+```
+
 ## jsonstat2csv
 
 Converts JSON-stat into CSV.
