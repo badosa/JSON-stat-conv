@@ -32,11 +32,13 @@ var
 	callback=function(contents){
 		var
 			vlabel=argv.vlabel || "Value",
+			status=(argv.status===true),
+			slabel=argv.slabel || "Status",
 			tbl=inout.dataset(contents).toTable({
 				type: "array",
 				vlabel: vlabel,
-				slabel: argv.slabel || "Status",
-				status: argv.status
+				slabel: slabel,
+				status: status
 			})
 		;
 
@@ -54,7 +56,9 @@ var
 				:
 				(argv.decimal===true || typeof argv.decimal==="undefined" ? "." : argv.decimal)
 			,
-			vcol=tbl[0].indexOf(vlabel)
+			vcol=tbl[0].indexOf(vlabel),
+			//0.5.2 status column
+			scol=status ? tbl[0].indexOf(slabel) : -1
 		;
 
 		if(delimiter==="\\t"){
@@ -63,7 +67,7 @@ var
 
 		tbl.forEach(function(r, j){
 			r.forEach(function(c, i){
-				if(i===vcol && j){
+				if(j && i===vcol){
 					if(c===null){
 						r[i]='"' + na + '"';
 					}else{
@@ -72,7 +76,11 @@ var
 						}
 					}
 				}else{
-					r[i]='"' + r[i] + '"';
+					if(j && i===scol && c===null){
+						r[i]=""; //Status does not use n/a because usually laking of status means "normal".
+					}else{
+						r[i]='"' + r[i] + '"';
+					}
 				}
 			});
 
