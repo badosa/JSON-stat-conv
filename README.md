@@ -18,15 +18,17 @@ Available commands:
 Get unemployment rate time series by country from Eurostat and convert it to CSV.
 
 ```
-curl 'http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?sex=T&precision=1&age=TOTAL&s_adj=NSA' -o unr.json
+curl http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?precision=1 -o unr.json
 jsonstat2csv unr.json unr.csv
 ```
 
 Or using the stream interface:
 
 ```
-curl 'http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?sex=T&precision=1&age=TOTAL&s_adj=NSA' | jsonstat2csv > unr.csv -t
+curl http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?precision=1 | jsonstat2csv > unr.csv -t
 ```
+
+More in the [Examples page](https://github.com/badosa/JSON-stat-conv/wiki/Examples).
 
 ## Shared options
 
@@ -142,6 +144,14 @@ Boolean. Returns a metadata-enriched output (object of objects, instead of array
 
 ```
 jsonstat2arrobj oecd.json oecd-objobj.json --meta
+```
+
+#### --comma (-k)
+
+Boolean. Represents values as strings instead of numbers with comma as the decimal mark.
+
+```
+jsonstat2arrobj canada.json canada-comma.json --comma
 ```
 
 #### --by (-b)

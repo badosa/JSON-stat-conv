@@ -24,6 +24,9 @@ var
 		.describe("p", "Prefix to be used when data is transposed")
 		.alias("d", "drop")
 		.describe("d", "Comma-separated single category dimensions to be dropped when data is transposed")
+		.boolean("k")
+		.alias("k", "comma")
+		.describe("k", "Represent values as strings with comma as the decimal mark")
 		.boolean("t")
 		.alias("t", "stream")
 		.describe("t", "Enable the stream interface")
@@ -44,7 +47,8 @@ var
 				meta: argv.meta,
 				by: argv.by,
 				prefix: argv.prefix,
-				drop: drop
+				drop: drop,
+				comma: argv.comma
 			})
 		;
 
