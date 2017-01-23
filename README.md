@@ -18,8 +18,9 @@ Available commands:
 Get unemployment rate time series by country from Eurostat and convert it to CSV.
 
 ```
-curl http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?precision=1 -o unr.json
-jsonstat2csv unr.json unr.csv
+curl http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?precision=1 -o unr.jsonstat
+
+jsonstat2csv unr.jsonstat unr.csv
 ```
 
 Or using the stream interface:
