@@ -19,7 +19,10 @@ var
 		.alias("m", "meta")
 		.describe("m", "Use the metadata enriched output (object of objects)")
 		.alias("b", "by")
-		.describe("b", "Transpose by the specified single category dimension")
+		.describe("b", "Transpose by the specified dimension")
+		.boolean("l")
+		.alias("l", "bylabel")
+		.describe("l", "Use labels instead of IDs to identify categories of the transposed dimension")
 		.alias("p", "prefix")
 		.describe("p", "Prefix to be used when data is transposed")
 		.alias("d", "drop")
@@ -46,6 +49,7 @@ var
 				unit: argv.unit,
 				meta: argv.meta,
 				by: argv.by,
+				bylabel: (argv.bylabel===true),
 				prefix: argv.prefix,
 				drop: drop,
 				comma: argv.comma

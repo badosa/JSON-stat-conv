@@ -163,6 +163,14 @@ String. Transposes data by the specified dimension. String must be an existing d
 jsonstat2arrobj oecd.json oecd-transp.json --by area
 ```
 
+#### --bylabel (-l)
+
+Boolean. Uses labels instead of IDs to identify categories of the transposed dimension.
+
+```
+jsonstat2arrobj oecd.json oecd-transp.json --by area --label
+```
+
 #### --prefix (-p)
 
 String. Text to be used as a prefix in the transposed categories. Only valid in combination with --by.
