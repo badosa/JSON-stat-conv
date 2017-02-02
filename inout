@@ -1,6 +1,6 @@
 var
 	fs=require("fs"),
-	readline=require("readline"),
+	rw=require("rw"),
 	JSONstat=require("jsonstat"),
 
 	dataset=function(contents){
@@ -87,40 +87,27 @@ var
 				JSON.stringify( callback( fs.readFileSync(input, "utf8") ) )
 			;
 
-
 			out( argv._[1], result);
 
 		}else{ //streams
+
 			if(argv._.length>1){
 				console.error("Error: With --stream enabled no input/output filename can be specified.");
 				process.exit(1);
 			}
 
-			process.stdin.setEncoding("utf8");
-
-			var
-				rl=readline.createInterface({
-					input: process.stdin,
-					output: process.stdout
-				}),
-				contents=""
-			;
-
-			rl.on("line", function(line){
-				contents+=line;
+			rw.readFile("/dev/stdin", "utf8", function(error, contents){
+				rw.writeFile("/dev/stdout", 
+					(csv) ?
+						callback(contents)
+						:
+						JSON.stringify( callback(contents) ),
+					"utf8",
+					function(err){
+						process.exit( +(err===null) );
+					}
+				);
 			});
-
-			rl.on("close", function(){
-				var result=(csv) ?
-					callback(contents)
-					:
-					JSON.stringify( callback(contents) )
-				;
-
-				console.log(result);
-				process.exit(0);
-			});
-
 		}
 	}
 ;
