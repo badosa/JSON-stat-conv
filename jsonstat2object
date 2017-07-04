@@ -32,8 +32,8 @@ var
 		var
 			tbl=inout.dataset(contents).toTable({
 				type: "object",
-				vlabel: argv.vlabel || "Value",
-				slabel: argv.slabel || "Status",
+				vlabel: argv.vlabel,
+				slabel: argv.slabel,
 				status: argv.status,
 				content: argv.cid ? "id": "label",
 				field: argv.fid ? "id": "label"

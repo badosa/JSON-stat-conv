@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+var
+	utils=require("jsonstat-utils"),
+	argv=require("yargs")
+		.version()
+		.usage("Usage:\n  $0 [input filename] [output filename]\n  $0 < [input] > [output] -t")
+		.example("$0 oecd.csv oecd.json", "converts the CSV file oecd.csv into a new file (oecd.json) in the JSON-stat format.")
+		.example("$0 < oecd.csv > oecd.json -t", "converts the CSV stream oecd.csv into a new stream (oecd.json) in the JSON-stat format.")
+		.alias("c", "column")
+		.describe("c", "Column separator (default, ',')")
+		.alias("d", "decimal")
+		.describe("d", "Decimal separator (default, '.', unless column separator is ';', then default is ',')")
+		.alias("v", "vlabel")
+		.describe("v", "Name of the value column. When not provided, the value column must be the last one.")
+		.alias("l", "slabel")
+		.describe("l", "Name of the status column (default is 'Status'). If no column has the specified name, no status information will be included in the output.")
+		.alias("a", "label")
+		.describe("a", "Dataset label.")
+		.boolean("t")
+		.alias("t", "stream")
+		.describe("t", "Enable the stream interface")
+		.help("h")
+		.alias("h", "help")
+		.argv
+	,
+	inout=require("./inout"),
+
+	callback=function(contents){
+		var
+			json=utils.fromCSV(
+				contents,
+				{
+					vlabel: argv.vlabel,
+					slabel: argv.slabel,
+					delimiter: (argv.column==="\\t") ? "\t" : argv.column,
+					decimal: argv.decimal,
+					label: argv.label
+				}
+			)
+		;
+
+		if(json===null || !json.size.length || (json.size.length===1 && json.value[0]===null)){
+			console.error("Error: Check your CSV and the options you supplied.");
+			process.exit(1);
+		}else{
+			return json;
+		}
+	}
+;
+
+inout.main(argv, callback, false);

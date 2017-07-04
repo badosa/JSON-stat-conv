@@ -1,14 +1,23 @@
 {
 	"name": "jsonstat-conv",
-	"version": "0.6.0",
+	"version": "0.7.0",
 	"description": "JSON-stat Command Line Conversion Tools",
 	"homepage": "https://github.com/badosa/JSON-stat-conv",
-	"keywords": ["conversion", "util", "jsonstat", "stats", "data", "cube", "opendata"],
+	"keywords": [
+		"conversion",
+		"util",
+		"jsonstat",
+		"stats",
+		"data",
+		"cube",
+		"opendata"
+	],
 	"bin": {
 		"jsonstat2array": "jsonstat2array",
 		"jsonstat2arrobj": "jsonstat2arrobj",
 		"jsonstat2object": "jsonstat2object",
-		"jsonstat2csv": "jsonstat2csv"
+		"jsonstat2csv": "jsonstat2csv",
+		"csv2jsonstat": "csv2jsonstat"
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -24,7 +33,8 @@
 	"license": "Apache-2.0",
 	"dependencies": {
 		"jsonstat": "^0.13.3",
-		"yargs": "^6.6.0",
-		"rw": "^1.3.3"
+		"jsonstat-utils": "^2.2.9",
+		"rw": "^1.3.3",
+		"yargs": "^6.6.0"
 	}
 }

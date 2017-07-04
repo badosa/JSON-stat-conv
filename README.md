@@ -8,6 +8,7 @@ npm install -g jsonstat-conv
 
 Available commands:
 
+* [csv2jsonstat](#csv2jsonstat) - converts CSV into JSON-stat
 * [jsonstat2array](#jsonstat2array) - converts JSON-stat into an array of arrays
 * [jsonstat2arrobj](#jsonstat2arrobj) - converts JSON-stat into an array of objects
 * [jsonstat2csv](#jsonstat2csv) - converts JSON-stat into CSV
@@ -55,6 +56,54 @@ Shows jsonstat-conv version.
 
 ```
 jsonstat2csv --version
+```
+
+## csv2jsonstat
+
+Converts CSV into JSON-stat.
+
+```
+csv2jsonstat galicia.csv galicia.json
+```
+
+#### --vlabel (-v)
+
+String. Specifies the name of the value column. When not provided, the value column must be the last one.
+
+```
+csv2jsonstat galicia.csv galicia.json --vlabel val
+```
+
+#### --slabel (l)
+
+String. Specifies the name of the status column. Default is "Status". If no column has the specified name, no status information will be included in the output.
+
+```
+csv2jsonstat oecd.csv oecd.json --slabel stat
+```
+
+#### --column (-c)
+
+String. Column separator. Default is ",".
+
+```
+csv2jsonstat galicia.ssv galicia.json --column ";"
+```
+
+#### --decimal (-d)
+
+String. Decimal separator. Default is ".", unless column separator is ";" (then default is ",").
+
+```
+csv2jsonstat galicia.tsv galicia.json --column "\t" --decimal ","
+```
+
+#### --label (-a)
+
+String. Dataset label.
+
+```
+csv2jsonstat galicia.csv galicia.json --label "Imported from galicia.csv"
 ```
 
 ## jsonstat2array
@@ -165,7 +214,7 @@ jsonstat2arrobj oecd.json oecd-transp.json --by area
 
 #### --bylabel (-l)
 
-Boolean. Uses labels instead of IDs to identify categories of the transposed dimension.
+Boolean. Uses labels instead of IDs to identify categories of the transposed dimension, unless --cid has been specified.
 
 ```
 jsonstat2arrobj oecd.json oecd-transp.json --by area --label
@@ -192,7 +241,7 @@ jsonstat2arrobj canada.json canada-transp.json --by concept --drop country,year
 Converts JSON-stat into CSV.
 
 ```
-jsonstat2array oecd.json oecd.csv
+jsonstat2csv oecd.json oecd.csv
 ```
 
 #### --status (-s)
@@ -232,7 +281,7 @@ jsonstat2csv oecd.json oecd.csv --na ":"
 String. Column separator. Default is ",".
 
 ```
-jsonstat2csv oecd.json oecd.csv --column ";"
+jsonstat2csv oecd.json oecd.ssv --column ";"
 ```
 
 #### --decimal (-d)
@@ -240,7 +289,7 @@ jsonstat2csv oecd.json oecd.csv --column ";"
 String. Decimal separator. Default is ".", unless column separator is ";" (then default is ",").
 
 ```
-jsonstat2csv oecd.json oecd.csv --column "\t" --decimal ","
+jsonstat2csv oecd.json oecd.tsv --column "\t" --decimal ","
 ```
 
 ## jsonstat2object

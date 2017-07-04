@@ -97,7 +97,7 @@ var
 			}
 
 			rw.readFile("/dev/stdin", "utf8", function(error, contents){
-				rw.writeFile("/dev/stdout", 
+				rw.writeFile("/dev/stdout",
 					(csv) ?
 						callback(contents)
 						:

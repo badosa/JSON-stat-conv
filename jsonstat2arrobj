@@ -41,7 +41,6 @@ var
 
 	callback=function(contents){
 		var
-			drop=(typeof argv.drop==="undefined") ? [] : argv.drop.split(","),
 			tbl=inout.dataset(contents).toTable({
 				type: "arrobj",
 				status: argv.status,
@@ -49,9 +48,9 @@ var
 				unit: argv.unit,
 				meta: argv.meta,
 				by: argv.by,
-				bylabel: (argv.bylabel===true),
+				bylabel: argv.bylabel,
 				prefix: argv.prefix,
-				drop: drop,
+				drop: (typeof argv.drop==="undefined") ? [] : argv.drop.split(","),
 				comma: argv.comma
 			})
 		;
