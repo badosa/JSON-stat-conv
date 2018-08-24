@@ -66,6 +66,8 @@ Converts CSV into JSON-stat.
 csv2jsonstat galicia.csv galicia.json
 ```
 
+All options are ignored when the input is a rich CSV in the JSON-stat Comma-Separated Values format (CSV-stat or JSV for short). See [jsonstat2csv](#jsonstat2csv).
+
 #### --vlabel (-v)
 
 String. Specifies the name of the value column. When not provided, the value column must be the last one.
@@ -270,7 +272,7 @@ jsonstat2csv oecd.json oecd.csv --status --slabel stat
 
 #### --na (-n)
 
-String. Not available symbol. Default is "n/a".
+String. Not available text. Default is "n/a".
 
 ```
 jsonstat2csv oecd.json oecd.csv --na ":"
@@ -291,6 +293,12 @@ String. Decimal separator. Default is ".", unless column separator is ";" (then 
 ```
 jsonstat2csv oecd.json oecd.tsv --column "\t" --decimal ","
 ```
+
+#### --rich (-r)
+
+Boolean. Output is a rich CSV in the JSON-stat Comma-Separated Values format (CSV-stat, or JSV for short). CSV-stat is CSV plus a metadata header. CSV-stat supports all the JSON-stat dataset core semantics. This means that CSV-stat can be converted back to JSON-stat (using [csv2jsonstat](#csv2jsonstat)) without loss of information (only the *note*, *link*, *child*, *coordinates* and *extension* properties are not currently supported).
+
+When this option is set, **--status**, **--vlabel** and **--slabel** are ignored.
 
 ## jsonstat2object
 

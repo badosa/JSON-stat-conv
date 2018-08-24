@@ -7,13 +7,18 @@ var
 		.usage("Usage:\n  $0 [input filename] [output filename]\n  $0 < [input] > [output] -t")
 		.example("$0 oecd.json oecd.csv", "converts JSON-stat file oecd.json into a new file (oecd.csv) in the CSV format.")
 		.example("$0 < oecd.json > oecd.csv -t", "converts JSON-stat stream oecd.json into a new stream (oecd.csv) in the CSV format.")
+		.boolean("r")
+		.alias("r", "rich")
+		.describe("r", "Create a rich CSV (JSON-stat Comma-Separated Values format)")
 		.boolean("s")
 		.alias("s", "status")
 		.describe("s", "Include status information")
 		.alias("n", "na")
-		.describe("n", "Not available symbol (default, 'n/a')")
+		.describe("n", "Not available text (default, 'n/a')")
 		.alias("c", "column")
 		.describe("c", "Column separator (default, ',')")
+		.alias("u", "unit")
+		.describe("u", "Unit separator (default, '|'). It must be different from the column separator")
 		.alias("d", "decimal")
 		.describe("d", "Decimal separator (default, '.', unless column separator is ';', then default is ',')")
 		.alias("v", "vlabel")
@@ -34,11 +39,13 @@ var
 			csv=utils.toCSV(
 				inout.dataset(contents),
 				{
+					rich: argv.rich,
 					status: argv.status,
 					vlabel: argv.vlabel,
 					slabel: argv.slabel,
 					na: argv.na,
 					delimiter: (argv.column==="\\t") ? "\t" : argv.column,
+					separator: (argv.unit==="\\t") ? "\t" : argv.unit,
 					decimal: argv.decimal
 				}
 			)
