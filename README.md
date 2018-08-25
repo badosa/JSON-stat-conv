@@ -1,4 +1,4 @@
-# JSON-stat-conv
+# JSON-stat Command Line Conversion Tools
 
 Command line tools for converting [JSON-stat](https://json-stat.org) documents.
 
