@@ -300,6 +300,10 @@ Boolean. Output is a rich CSV in the JSON-stat Comma-Separated Values format (CS
 
 When this option is set, **--status**, **--vlabel** and **--slabel** are ignored.
 
+```
+jsonstat2csv oecd.json oecd.jsv --rich
+```
+
 ## jsonstat2object
 
 Converts JSON-stat into an object of arrays in the [Google DataTable format](https://developers.google.com/chart/interactive/docs/reference#dataparam).
