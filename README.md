@@ -296,7 +296,7 @@ jsonstat2csv oecd.json oecd.tsv --column "\t" --decimal ","
 
 #### --rich (-r)
 
-Boolean. Output is a rich CSV in the JSON-stat Comma-Separated Values format (CSV-stat, or JSV for short). CSV-stat is CSV plus a metadata header. CSV-stat supports all the JSON-stat dataset core semantics. This means that CSV-stat can be converted back to JSON-stat (using [csv2jsonstat](#csv2jsonstat)) without loss of information (only the *note*, *link*, *child*, *coordinates* and *extension* properties are not currently supported).
+Boolean. Output is a rich CSV in the [JSON-stat Comma-Separated Values format](https://github.com/badosa/CSV-stat) (CSV-stat, or JSV for short). CSV-stat is CSV plus a metadata header. CSV-stat supports all the JSON-stat dataset core semantics. This means that CSV-stat can be converted back to JSON-stat (using [csv2jsonstat](#csv2jsonstat)) without loss of information (only the *note*, *link*, *child*, *coordinates* and *extension* properties are not currently supported).
 
 When this option is set, **--status**, **--vlabel** and **--slabel** are ignored.
 
