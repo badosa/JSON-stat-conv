@@ -66,7 +66,7 @@ Converts CSV into JSON-stat.
 csv2jsonstat galicia.csv galicia.json
 ```
 
-All options are ignored when the input is a rich CSV in the JSON-stat Comma-Separated Values format (CSV-stat or JSV for short). See [jsonstat2csv](#jsonstat2csv).
+All options are ignored when the input is a rich CSV in the [JSON-stat Comma-Separated Values format](https://github.com/badosa/CSV-stat) (CSV-stat or JSV for short). See [jsonstat2csv](#jsonstat2csv).
 
 #### --vlabel (-v)
 
