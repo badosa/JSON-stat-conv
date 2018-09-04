@@ -13,6 +13,7 @@ Available commands:
 * [jsonstat2arrobj](#jsonstat2arrobj) - converts JSON-stat into an array of objects
 * [jsonstat2csv](#jsonstat2csv) - converts JSON-stat into CSV
 * [jsonstat2object](#jsonstat2object) - converts JSON-stat into an object
+* [jsonstatslice](#jsonstatslice) - creates a subset from JSON-stat
 
 ## Example
 
@@ -350,4 +351,30 @@ Boolean. Identifies categories by ID instead of label.
 
 ```
 jsonstat2object oecd.json oecd-object.json --cid
+```
+
+## jsonstatslice
+
+Creates a JSON-stat subset from a JSON-stat dataset. A JSON-stat subset has the same dimensions as the original dataset but with some of them fixed for a certain category.
+
+```
+jsonstatslice oecd.json oecd-subset.json -f area=DE,year=2014
+```
+
+In the previous example, oecd-subset.json only contains data for Germany in 2014.
+
+#### --filter (-f)
+
+String. Specifies a filter. When no filter is specified, the original JSON-stat will be returned.
+
+A filter is a comma-separated list of selection criteria. Each criterion must follow the pattern *{dimension id}={category id}*. Because dimension ids and category ids are strings that can contain whitespaces, they should be double-quoted.
+
+```
+"area"="DE","year"="2014"
+```
+
+forces the subset to keep only category "DE" from dimension "area" and category "2014" from dimension "year". Because these ids do not contain whitespaces, double quotes are not strictly necessary.
+
+```
+area=DE,year=2014
 ```
