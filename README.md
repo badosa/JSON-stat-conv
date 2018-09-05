@@ -380,5 +380,5 @@ A filter is a comma-separated list of selection criteria. Each criterion must fo
 forces the subset to keep only category "DE" from dimension "area" and category "2014" from dimension "year". Because these ids do not contain whitespaces, double quotes are not strictly necessary.
 
 ```
-area=DE,year=2014
+jsonstatslice oecd.json oecd-subset.json -f area=DE,year=2014
 ```
