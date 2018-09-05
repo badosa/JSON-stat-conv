@@ -1,6 +1,6 @@
 {
 	"name": "jsonstat-conv",
-	"version": "0.9.0",
+	"version": "0.9.1",
 	"description": "JSON-stat Command Line Conversion Tools",
 	"homepage": "https://github.com/badosa/JSON-stat-conv",
 	"keywords": [
@@ -18,7 +18,8 @@
 		"jsonstat2object": "jsonstat2object",
 		"jsonstat2csv": "jsonstat2csv",
 		"csv2jsonstat": "csv2jsonstat",
-		"jsonstatslice": "jsonstatslice"
+		"jsonstatslice": "jsonstatslice",
+		"jsonstat2jsonstat": "jsonstat2jsonstat"
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"

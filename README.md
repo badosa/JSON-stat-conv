@@ -13,7 +13,7 @@ Available commands:
 * [jsonstat2arrobj](#jsonstat2arrobj) - converts JSON-stat into an array of objects
 * [jsonstat2csv](#jsonstat2csv) - converts JSON-stat into CSV
 * [jsonstat2object](#jsonstat2object) - converts JSON-stat into an object
-* [jsonstatslice](#jsonstatslice) - creates a subset from JSON-stat
+* [jsonstatslice (aka jsonstat2jsonstat)](#jsonstatslice-aka-jsonstat2jsonstat) - creates JSON-stat from JSON-stat
 
 ## Example
 
@@ -353,9 +353,9 @@ Boolean. Identifies categories by ID instead of label.
 jsonstat2object oecd.json oecd-object.json --cid
 ```
 
-## jsonstatslice
+## jsonstatslice (aka jsonstat2jsonstat)
 
-Creates a JSON-stat subset from a JSON-stat dataset. A JSON-stat subset has the same dimensions as the original dataset but with some of them fixed for a certain category.
+Creates JSON-stat from JSON-stat. It can be used to convert old JSON-stat to JSON-stat version 2.0. Because it supports a filter parameter, it can also be used to creates a JSON-stat subset from a JSON-stat dataset. A JSON-stat subset has the same dimensions as the original dataset but with some of them fixed for a certain category.
 
 ```
 jsonstatslice oecd.json oecd-subset.json -f area=DE,year=2014
@@ -365,7 +365,11 @@ In the previous example, oecd-subset.json only contains data for Germany in 2014
 
 #### --filter (-f)
 
-String. Specifies a filter. When no filter is specified, the original JSON-stat will be returned.
+String. Specifies a filter. When no filter is specified, the original JSON-stat will be returned unless it was not JSON-stat 2.0: in such case, it will be updated to version 2.0.
+
+```
+jsonstat2jsonstat jsonstat10.json jsonstat20.json
+```
 
 A filter is a comma-separated list of selection criteria. Each criterion must follow the pattern *{dimension id}={category id}*. Because dimension ids and category ids are strings that can contain whitespaces, they should be double-quoted.
 
