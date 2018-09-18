@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+var
+	utils=require("jsonstat-utils"),
+	argv=require("yargs")
+		.version()
+		.usage("Usage:\n  $0 [input filename] [output filename]\n  $0 < [input] > [output] -t")
+		.example("$0 sdmx.json jsonstat.json", "converts SDMX-JSON file sdmx.json into JSON-stat (jsonstat.json).")
+		.example("$0 < sdmx.json > jsonstat.json -t", "converts JSDMX-JSON stream sdmx.json into a JSON-stat stream (jsonstat.json).")
+		.help("h")
+		.alias("h", "help")
+		.argv
+	,
+	inout=require("./inout"),
+
+	callback=function(contents){
+		try{
+			var json=JSON.parse(contents);
+		}catch (e){
+			console.error("Error: The input does not containt JSON.");
+			process.exit(1);
+		}
+
+		var json=utils.fromSDMX(json);
+
+		if(json===null){
+			console.error("Error: Check your SDMX-JSON.");
+			process.exit(1);
+		}else{
+			return json;
+		}
+	}
+;
+
+inout.main(argv, callback);

@@ -49,4 +49,4 @@ var
 	}
 ;
 
-inout.main(argv, callback, false);
+inout.main(argv, callback);

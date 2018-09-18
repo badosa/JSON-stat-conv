@@ -42,7 +42,7 @@ var
 		return ds;
 	},
 
-	main=function(argv, callback, csv){
+	main=function(argv, callback, isString){
 		if(!argv.stream){
 			if(argv._.length<2){
 				console.error("Error: When --stream is not enabled you must specify two filenames.");
@@ -81,7 +81,7 @@ var
 				process.exit(1);
 			}
 
-			var result=(csv) ?
+			var result=(isString) ?
 				callback( fs.readFileSync(input, "utf8") )
 				:
 				JSON.stringify( callback( fs.readFileSync(input, "utf8") ) )
@@ -98,7 +98,7 @@ var
 
 			rw.readFile("/dev/stdin", "utf8", function(error, contents){
 				rw.writeFile("/dev/stdout",
-					(csv) ?
+					(isString) ?
 						callback(contents)
 						:
 						JSON.stringify( callback(contents) ),

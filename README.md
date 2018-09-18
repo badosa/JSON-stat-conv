@@ -14,6 +14,7 @@ Available commands:
 * [jsonstat2csv](#jsonstat2csv) - converts JSON-stat into CSV
 * [jsonstat2object](#jsonstat2object) - converts JSON-stat into an object
 * [jsonstatslice (aka jsonstat2jsonstat)](#jsonstatslice-aka-jsonstat2jsonstat) - creates JSON-stat from JSON-stat
+* [sdmx2jsonstat](#sdmx2jsonstat) - converts SDMX into JSON-stat
 
 ## Example
 
@@ -381,4 +382,12 @@ forces the subset to keep only category "DE" from dimension "area" and category 
 
 ```
 jsonstatslice oecd.json oecd-subset.json -f area=DE,year=2014
+```
+
+## sdmx2jsonstat
+
+Creates JSON-stat from SDMX-JSON. The input must be in the SDMX-JSON format. Inputs with more than one dataset are not supported. Intermediate grouping ("time series", "cross-section") is not supported, either. Only SDMX-JSON with a flat list of observations (*dimensionAtObservation=allDimensions*) is supported. This is sometimes referred to as the **SDMX-JSON flat format flavor**.
+
+```
+sdmx2jsonstat sdmx.json stat.json
 ```

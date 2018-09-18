@@ -1,6 +1,6 @@
 {
 	"name": "jsonstat-conv",
-	"version": "0.9.1",
+	"version": "0.10.0",
 	"description": "JSON-stat Command Line Conversion Tools",
 	"homepage": "https://github.com/badosa/JSON-stat-conv",
 	"keywords": [
@@ -19,7 +19,8 @@
 		"jsonstat2csv": "jsonstat2csv",
 		"csv2jsonstat": "csv2jsonstat",
 		"jsonstatslice": "jsonstatslice",
-		"jsonstat2jsonstat": "jsonstat2jsonstat"
+		"jsonstat2jsonstat": "jsonstat2jsonstat",
+		"sdmx2jsonstat": "sdmx2jsonstat"
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -35,7 +36,7 @@
 	"license": "Apache-2.0",
 	"dependencies": {
 		"jsonstat": "^0.13.3",
-		"jsonstat-utils": "^2.3.3",
+		"jsonstat-utils": "^2.4.0",
 		"rw": "^1.3.3",
 		"yargs": "^6.6.0"
 	}
