@@ -1,6 +1,6 @@
 {
 	"name": "jsonstat-conv",
-	"version": "0.10.0",
+	"version": "0.10.1",
 	"description": "JSON-stat Command Line Conversion Tools",
 	"homepage": "https://github.com/badosa/JSON-stat-conv",
 	"keywords": [
@@ -36,7 +36,7 @@
 	"license": "Apache-2.0",
 	"dependencies": {
 		"jsonstat": "^0.13.3",
-		"jsonstat-utils": "^2.4.0",
+		"jsonstat-utils": "^2.4.1",
 		"rw": "^1.3.3",
 		"yargs": "^6.6.0"
 	}
