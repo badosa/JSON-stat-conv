@@ -38,12 +38,15 @@ var
 			}
 		}
 
-		delete tree.role.classification;
-		["geo", "time", "metric"].forEach(function(e){
-			if(tree.role[e]===null){
-				delete tree.role[e];
-			}
-		});
+		if(tree.hasOwnProperty("role")){
+			delete tree.role.classification;
+
+			["geo", "time", "metric"].forEach(function(e){
+				if(tree.role[e]===null){
+					delete tree.role[e];
+				}
+			});
+		}
 
 		return JSON.stringify(tree);
 	}
