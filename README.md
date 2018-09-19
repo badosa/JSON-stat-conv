@@ -21,7 +21,7 @@ Available commands:
 Get unemployment rate time series by country from Eurostat and convert it to CSV.
 
 ```
-curl http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?precision=1 -o unr.jsonstat
+curl https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?precision=1 -o unr.jsonstat
 
 jsonstat2csv unr.jsonstat unr.csv
 ```
@@ -29,7 +29,7 @@ jsonstat2csv unr.jsonstat unr.csv
 Or using the stream interface:
 
 ```
-curl http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?precision=1 | jsonstat2csv > unr.csv -t
+curl https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?precision=1 | jsonstat2csv > unr.csv -t
 ```
 
 More in the [Examples page](https://github.com/badosa/JSON-stat-conv/wiki/Examples).
