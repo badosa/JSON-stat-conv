@@ -78,7 +78,7 @@ String. Specifies the name of the value column. When not provided, the value col
 csv2jsonstat galicia.csv galicia.json --vlabel val
 ```
 
-#### --slabel (l)
+#### --slabel (-l)
 
 String. Specifies the name of the status column. Default is "Status". If no column has the specified name, no status information will be included in the output.
 
@@ -109,6 +109,14 @@ String. Dataset label.
 ```
 csv2jsonstat galicia.csv galicia.json --label "Imported from galicia.csv"
 ```
+
+#### --ovalue (-o)
+
+Boolean. Includes a "value" property of type array instead of object.
+
+#### --ostatus (-s)
+
+Boolean. When status information is available, includes a "status" property of type array instead of object.
 
 ## jsonstat2array
 
@@ -391,3 +399,13 @@ Creates JSON-stat from SDMX-JSON. The input must be in the SDMX-JSON format. Inp
 ```
 sdmx2jsonstat sdmx.json stat.json
 ```
+
+### Options
+
+#### --ovalue (-o)
+
+Boolean. Includes a "value" property of type object instead of array.
+
+#### --ostatus (-s)
+
+Boolean. When status information is available, includes a "status" property of type object instead of array.

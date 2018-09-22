@@ -17,6 +17,12 @@ var
 		.describe("l", "Name of the status column (default is 'Status'). If no column has the specified name, no status information will be included in the output.")
 		.alias("a", "label")
 		.describe("a", "Dataset label.")
+		.boolean("o")
+		.alias("o", "ovalue")
+		.describe("o", "Type of value: object instead of array")
+		.boolean("s")
+		.alias("s", "ostatus")
+		.describe("s", "Type of status: object instead of array")
 		.boolean("t")
 		.alias("t", "stream")
 		.describe("t", "Enable the stream interface")
@@ -35,7 +41,9 @@ var
 					slabel: argv.slabel,
 					delimiter: (argv.column==="\\t") ? "\t" : argv.column,
 					decimal: argv.decimal,
-					label: argv.label
+					label: argv.label,
+					ovalue: argv.ovalue,
+					ostatus: argv.ostatus
 				}
 			)
 		;

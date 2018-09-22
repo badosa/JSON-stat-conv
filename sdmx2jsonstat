@@ -7,6 +7,15 @@ var
 		.usage("Usage:\n  $0 [input filename] [output filename]\n  $0 < [input] > [output] -t")
 		.example("$0 sdmx.json jsonstat.json", "converts SDMX-JSON file sdmx.json into JSON-stat (jsonstat.json).")
 		.example("$0 < sdmx.json > jsonstat.json -t", "converts JSDMX-JSON stream sdmx.json into a JSON-stat stream (jsonstat.json).")
+		.boolean("o")
+		.alias("o", "ovalue")
+		.describe("o", "Type of value: object instead of array")
+		.boolean("s")
+		.alias("s", "ostatus")
+		.describe("s", "Type of status: object instead of array")
+		.boolean("t")
+		.alias("t", "stream")
+		.describe("t", "Enable the stream interface")
 		.help("h")
 		.alias("h", "help")
 		.argv
@@ -21,7 +30,13 @@ var
 			process.exit(1);
 		}
 
-		var json=utils.fromSDMX(json);
+		var json=utils.fromSDMX(
+			json,
+			{
+				ovalue: argv.ovalue,
+				ostatus: argv.ostatus
+			}
+		);
 
 		if(json===null){
 			console.error("Error: Check your SDMX-JSON.");
