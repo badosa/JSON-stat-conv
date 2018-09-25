@@ -392,6 +392,18 @@ forces the subset to keep only category "DE" from dimension "area" and category 
 jsonstatslice oecd.json oecd-subset.json -f area=DE,year=2014
 ```
 
+#### --modify (-m)
+
+Boolean. When this option is not set, the *value* and *status* types of the input dataset are kept. When this option is set, the type of these two properties is transformed taking into account **--ovalue** and **--ostatus**.
+
+#### --ovalue (-o)
+
+Boolean. When **--modify** is set, it includes a "value" property of type object instead of array. When **--modify** is set and **--ovalue** is not, it includes a "value" property of type array.
+
+#### --ostatus (-s)
+
+Boolean. When status information is available and **--modify** is set, includes a "status" property of type object instead of array. When **--modify** is set and **--ostatus** is not, it includes a "value" property of type array.
+
 ## sdmx2jsonstat
 
 Creates JSON-stat from SDMX-JSON. The input must be in the SDMX-JSON format. Inputs with more than one dataset are not supported. Intermediate grouping ("time series", "cross-section") is not supported, either. Only SDMX-JSON with a flat list of observations (*dimensionAtObservation=allDimensions*) is supported. This is sometimes referred to as the **SDMX-JSON flat format flavor**.

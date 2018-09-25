@@ -8,6 +8,15 @@ var
 		.example("$0 < old.json > v20.json -t", "converts JSON-stat stream old.json into a JSON-stat 2.0 stream (v20.json).")
 		.alias("f", "filter")
 		.describe("f", "Filter string (for example: area=DE,year=2014)")
+		.boolean("m")
+		.alias("m", "modify")
+		.describe("m", "Modify value and status type")
+		.boolean("o")
+		.alias("o", "ovalue")
+		.describe("o", "Type of value: object instead of array")
+		.boolean("s")
+		.alias("s", "ostatus")
+		.describe("s", "Type of status: object instead of array")
 		.boolean("t")
 		.alias("t", "stream")
 		.describe("t", "Enable the stream interface")
@@ -16,6 +25,56 @@ var
 		.argv
 	,
 	inout=require("./inout"),
+
+	arr2obj=function(o,p){ //o object p property
+		var ret={};
+		if(Object.prototype.toString.call(o[p]) === '[object Array]'){
+			o[p].forEach(function(e,i){
+				if(e!==null){
+					ret[String(i)]=e;
+				}
+			});
+			return ret;
+		}
+		return o[p];
+	},
+
+	obj2arr=function(o,p){	//o object p property
+		var
+			v,
+			ret=[],
+			i=o.size.reduce(function(a, b){ return a * b;});
+		;
+
+		if(typeof o[p] === 'object' && Object.prototype.toString.call(o[p]) !== '[object Array]'){
+			for(;i--;){
+				v=o[p][String(i)];
+				ret[i]=typeof v!=="undefined" ? v : null;
+			}
+			return ret;
+		}
+
+		return o[p];
+	},
+
+	modify=function(tree, attr){
+    var
+      arg=(attr==="value") ? argv.ovalue : argv.ostatus,
+      typ=Object.prototype.toString.call(tree[attr])
+    ;
+
+    if(
+      //value/status is array but object was requested
+      (typ==="[object Array]" && arg)
+      ||
+      //value/status is object but array was requested
+      (typ!=="[object Array]" && !arg)
+    ){
+      var newcont=arg ? arr2obj(tree, attr) : obj2arr(tree, attr);
+      delete tree[attr];
+      tree[attr]=newcont;
+    }
+  },
 
 	stringify=function(json){
 		var tree=json.__tree__;
@@ -38,6 +97,10 @@ var
 			}
 		}
 
+		if(tree.hasOwnProperty("status") && tree.status===null){
+			delete tree.status;
+		}
+
 		if(tree.hasOwnProperty("role")){
 			delete tree.role.classification;
 
@@ -48,8 +111,15 @@ var
 			});
 		}
 
+		if(argv.modify){
+	    modify(tree, "value");
+	    if(tree.hasOwnProperty("status")){
+	      modify(tree, "status");
+	    }
+	  }
+
 		return JSON.stringify(tree);
-	}
+	},
 
 	callback=function(contents){
 		var
@@ -58,10 +128,9 @@ var
 			filter=argv.filter
 		;
 
-		//filter is not required: if not specified (no -f or -f without string) input=output
+		//filter is not required: if not specified (no -f or -f without string) don't slice
 		if(!filter || filter===true){
-			//Depending on version (v<2.0)
-			return contents.id ? contents : stringify( inout.dataset(contents) );
+			return stringify( inout.dataset(contents) );
 		}
 
 		if(filter.indexOf("=")===-1){

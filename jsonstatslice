@@ -8,6 +8,15 @@ var
 		.example("$0 < oecd.json > oecd-subset.json -f \"area\"=\"DE\",\"year\"=\"2014\" -t", "converts JSON-stat stream oecd.json into a new JSON-stat stream (oecd-subset.json).")
 		.alias("f", "filter")
 		.describe("f", "Filter string (for example: area=DE,year=2014)")
+		.boolean("m")
+		.alias("m", "modify")
+		.describe("m", "Modify value and status type")
+		.boolean("o")
+		.alias("o", "ovalue")
+		.describe("o", "Type of value: object instead of array")
+		.boolean("s")
+		.alias("s", "ostatus")
+		.describe("s", "Type of status: object instead of array")
 		.boolean("t")
 		.alias("t", "stream")
 		.describe("t", "Enable the stream interface")
@@ -17,70 +26,131 @@ var
 	,
 	inout=require("./inout"),
 
-	stringify=function(json){
-		var tree=json.__tree__;
 
-		//if v<2.0 convert to 2.0
-		if(!tree.hasOwnProperty("id")){
-			tree.version="2.0";
-			if(!tree.hasOwnProperty("class")){
-				tree.class="dataset";
+		arr2obj=function(o,p){ //o object p property
+			var ret={};
+			if(Object.prototype.toString.call(o[p]) === '[object Array]'){
+				o[p].forEach(function(e,i){
+					if(e!==null){
+						ret[String(i)]=e;
+					}
+				});
+				return ret;
 			}
+			return o[p];
+		},
 
-			tree.id=tree.dimension.id;
-			tree.size=tree.dimension.size;
-			delete tree.dimension.id;
-			delete tree.dimension.size;
+		obj2arr=function(o,p){	//o object p property
+			var
+				v,
+				ret=[],
+				i=o.size.reduce(function(a, b){ return a * b;});
+			;
 
-			if(tree.dimension.hasOwnProperty("role")){
-				tree.role=tree.dimension.role;
-				delete tree.dimension.role;
-			}
-		}
-
-		if(tree.hasOwnProperty("role")){
-			delete tree.role.classification;
-
-			["geo", "time", "metric"].forEach(function(e){
-				if(tree.role[e]===null){
-					delete tree.role[e];
+			if(typeof o[p] === 'object' && Object.prototype.toString.call(o[p]) !== '[object Array]'){
+				for(;i--;){
+					v=o[p][String(i)];
+					ret[i]=typeof v!=="undefined" ? v : null;
 				}
+				return ret;
+			}
+
+			return o[p];
+		},
+
+		modify=function(tree, attr){
+	    var
+	      arg=(attr==="value") ? argv.ovalue : argv.ostatus,
+	      typ=Object.prototype.toString.call(tree[attr])
+	    ;
+
+	    if(
+	      //value/status is array but object was requested
+	      (typ==="[object Array]" && arg)
+	      ||
+	      //value/status is object but array was requested
+	      (typ!=="[object Array]" && !arg)
+	    ){
+	      var newcont=arg ? arr2obj(tree, attr) : obj2arr(tree, attr);
+	      delete tree[attr];
+	      tree[attr]=newcont;
+	    }
+	  },
+
+		stringify=function(json){
+			var tree=json.__tree__;
+
+			//if v<2.0 convert to 2.0
+			if(!tree.hasOwnProperty("id")){
+				tree.version="2.0";
+				if(!tree.hasOwnProperty("class")){
+					tree.class="dataset";
+				}
+
+				tree.id=tree.dimension.id;
+				tree.size=tree.dimension.size;
+				delete tree.dimension.id;
+				delete tree.dimension.size;
+
+				if(tree.dimension.hasOwnProperty("role")){
+					tree.role=tree.dimension.role;
+					delete tree.dimension.role;
+				}
+			}
+
+			if(tree.hasOwnProperty("status") && tree.status===null){
+				delete tree.status;
+			}
+
+			if(tree.hasOwnProperty("role")){
+				delete tree.role.classification;
+
+				["geo", "time", "metric"].forEach(function(e){
+					if(tree.role[e]===null){
+						delete tree.role[e];
+					}
+				});
+			}
+
+			if(argv.modify){
+		    modify(tree, "value");
+		    if(tree.hasOwnProperty("status")){
+		      modify(tree, "status");
+		    }
+		  }
+
+			return JSON.stringify(tree);
+		},
+
+		callback=function(contents){
+			var
+				arrfil,
+				subset,
+				filter=argv.filter
+			;
+
+			//filter is not required: if not specified (no -f or -f without string) don't slice
+			if(!filter || filter===true){
+				return stringify( inout.dataset(contents) );
+			}
+
+			if(filter.indexOf("=")===-1){
+				console.error("Error: The filter has not been specified correctly (missing =).");
+				process.exit(1);
+			}
+
+			arrfil=filter.split(",").map(function(e){
+				return e.split("=");
 			});
+
+			subset=inout.dataset(contents).Slice(arrfil);
+			if(subset===null){
+				console.error("Error: The input does not containt valid JSON-stat or the filters are not valid.");
+				process.exit(1);
+			}else{
+				return stringify(subset);
+			}
 		}
+	;
 
-		return JSON.stringify(tree);
-	}
-
-	callback=function(contents){
-		var
-			arrfil,
-			subset,
-			filter=argv.filter
-		;
-
-		//filter is not required: if not specified (no -f or -f without string) input=output
-		if(!filter || filter===true){
-			//Depending on version (v<2.0)
-			return contents.id ? contents : stringify( inout.dataset(contents) );
-		}
-
-		if(filter.indexOf("=")===-1){
-			console.error("Error: The filter has not been specified correctly (missing =).");
-			process.exit(1);
-		}
-
-		arrfil=filter.split(",").map(function(e){
-			return e.split("=");
-		});
-
-		subset=inout.dataset(contents).Slice(arrfil);
-		if(subset===null){
-			console.error("Error: The input does not containt valid JSON-stat or the filters are not valid.");
-			process.exit(1);
-		}else{
-			return stringify(subset);
-		}
-	}
-;
-
-inout.main(argv, callback, true);
+	inout.main(argv, callback, true);
