@@ -39,7 +39,7 @@ var
 		);
 
 		if(json===null){
-			console.error("Error: Check your SDMX-JSON.");
+			console.error("Error: Check your SDMX-JSON. Only flat SDMX-JSON with a single dataset is supported.");
 			process.exit(1);
 		}else{
 			return json;
