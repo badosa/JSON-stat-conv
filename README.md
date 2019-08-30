@@ -194,7 +194,7 @@ jsonstat2arrobj oecd.json oecd-arrobj.json --cid
 
 #### --unit (-u)
 
-Boolean. Includes unit information when available.
+Boolean. Includes unit information in a property called "unit". If the dataset does not include unit information, the value of the "unit" property will be null.
 
 ```
 jsonstat2arrobj oecd.json oecd-arrobj.json --unit
